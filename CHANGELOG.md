@@ -4,7 +4,17 @@ A user-facing record of what changed between releases. Internal/historical names
 
 ---
 
-## v2.2 — 2026-05-21 *(first store submission)*
+## v2.2.1 — 2026-05-21 *(first store submission)*
+
+**Bug fix:**
+
+- **Icon no longer flicks at walking pace.** The ▲ / ⊙ icon flips on the rider's *current* speed (introduced in v2.2). At ~4 km/h walking, GPS jitter could briefly push the speed reading above the 7 km/h motion threshold and flip the icon to ▲ for a tick before reverting. v2.2.1 adds a 3-second consecutive-sample debounce: the icon flips only after 3 seconds of sustained state change, so a one-off jitter spike is ignored. Traffic-light-stop responsiveness for real cycling is unchanged.
+
+**Unit tests:** 96 passing (4 new for the debounce helper).
+
+---
+
+## v2.2 — 2026-05-21 *(superseded by v2.2.1 before first store submission)*
 
 **Bug fixes:**
 
