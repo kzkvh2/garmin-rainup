@@ -4,7 +4,19 @@ A user-facing record of what changed between releases. Internal/historical names
 
 ---
 
-## v2.2.1 — 2026-05-21 *(first store submission)*
+## v2.2.2 — 2026-05-21 *(first store submission)*
+
+**Launcher icon:**
+
+- **Real launcher icon designed and shipped.** A clean two-tone mark: a white raindrop silhouette with a black up-arrow cut out of its centre. Captures "rain + up" in a single shape that reads at every device size. Replaces the placeholder icon that v1 → v2.2.1 carried.
+- **Per-device native sizes.** Each Edge model now bundles a launcher icon at its native pixel size — 35×35, 36×36, 40×40, 56×56, and 68×68 — instead of relying on the system's auto-scaling. No more blur on smaller (530 / 540 / 830 / 840) or larger (550 / 850 / 1050) screens.
+- Build pipeline updated: `monkey.jungle` declares per-device resource paths; each `resources-<deviceId>/drawables/` carries a native-size `launcher_icon.png` plus a matching `drawables.xml`. `.iq` package build is now warning-free across all 12 devices.
+
+**Unit tests:** 96 passing (no behavioural code change since v2.2.1).
+
+---
+
+## v2.2.1 — 2026-05-21 *(superseded by v2.2.2 before first store submission)*
 
 **Bug fix:**
 
