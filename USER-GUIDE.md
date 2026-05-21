@@ -20,8 +20,9 @@ location. RainUp is built differently:
   coming. No exceptions, no jargon to learn.
 - **Honest signal.** A small icon on Row 3 always tells you whether
   the forecast you're reading is "along your path" (▲) or "at your
-  spot" (⊙). The icon changes when your motion changes — so if you
-  stop and the picture flips, you know why.
+  spot" (⊙). The icon flips instantly when your motion changes, and
+  the underlying data resamples within about a minute — so a stop
+  never leaves stale path-ahead text on the screen.
 
 ## How to install
 
@@ -189,23 +190,34 @@ full data payload, the field has room to breathe.
   not perfect. Forecasts can lag a fast-moving front by 10–15 minutes.
   Heavy localised showers can be entirely missed by the model.
 - **Projection assumes straight line at current pace.** If you take a
-  90° turn or stop, the rain projection along your previous heading is
-  invalid until the next fetch (every 5 minutes).
+  90° turn mid-ride, the rain projection along your previous heading is
+  invalid until the next fetch lands (within 5 minutes).
+- **Stops re-resolve quickly.** When you stop, the icon flips to ⊙
+  within a second and Row 2/3 fall back to your current-location
+  forecast. The underlying data refreshes within about a minute (a
+  fresh fetch is forced for your standing location), so a stop never
+  leaves stale path-ahead text on the screen for long.
 - **Sparkline is your current location, not your route.** It shows what
   the weather will be where you are *standing* over the next 6 hours.
   Use it for "will it stop?" / "will it intensify?", not "is it raining
   at km 25 of my route?".
 - **Projection only fires at cycling speed.** If you're below ~7 km/h,
-  the projection (arrow + distance) doesn't fire — the field treats you
-  as stationary and falls back to the current-location forecast in
-  rows 2/3.
+  the field treats you as stationary — Row 3 shows ⊙, and Row 2 falls
+  back to the current-location outlook.
+- **Indoor / trainer rides aren't supported.** The projection assumes
+  real-world movement. On a smart trainer with the bike stationary but
+  speed reading from the trainer, the field thinks you're moving and
+  plans against locations you're not actually going to. Use a different
+  weather field for indoor sessions.
 - **Fetch interval is 5 minutes** (Garmin platform limit for data
   fields). The forecast can't update faster than that on a steady ride.
-  Two exceptions where the field forces an earlier refetch:
+  Three exceptions where the field forces an earlier refetch:
     - When your phone **reconnects** after a Bluetooth drop.
     - When you **start moving** after a fetch happened while you were
       stationary — so the projection re-plans against your new heading
-      and pace instead of waiting out the cadence.
+      and pace.
+    - When you **stop** after a fetch happened while you were moving —
+      so Row 2/3 resample at your standing location.
   The rolling ETA (minutes-to-hit) updates every second from your
   current speed and GPS, so as you speed up or slow down the timing
   reflects it.
