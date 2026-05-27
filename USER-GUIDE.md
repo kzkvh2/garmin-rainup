@@ -13,7 +13,7 @@ Most weather fields show a single forecast snapshot at your *current*
 location. RainUp is built differently:
 
 - **Direction-aware, not just location-aware.** RainUp queries the
-  weather at the actual positions you'll be in 30 / 60 / 90 minutes
+  weather at the actual positions you'll be in 30 and 60 minutes
   from now (dead-reckoned from your heading and pace). The answer
   accounts for where you'll *be*, not where you're standing now.
 - **One reading rule.** Top line is now. Lines below are what's
@@ -54,7 +54,9 @@ Edge Explore 2, Edge MTB.
 Every screen follows that rule. The language helps too: top row ends
 in `now` (or just says `Dry`); rows below say `in N min` / `Clearing
 in N min` / `Rain next 6h` / `Clear next 6h` — the words tell you the
-time is in the future.
+time is in the future. (Times more than an hour out read as rounded
+hours — `~2h`, `~3h` — since the forecast isn't minute-accurate that
+far ahead.)
 
 ### Row 1 — Right now
 
@@ -62,6 +64,7 @@ time is in the future.
 |---|---|
 | It's not raining on you | `Dry` |
 | It's raining on you | `Drizzle now · 0.1mm` / `Light rain now · 0.8mm` / `Moderate rain now · 2.0mm` / `Heavy rain now · 8.0mm` |
+| There's a **thunderstorm** where you are | `Storm now` (or `Storm now · 8.0mm` when it's also raining) |
 | Something's wrong | `no GPS` / `no phone` / `no data` *(all in red)* |
 | App still loading / no data yet | `--` |
 
@@ -85,6 +88,14 @@ moving" case. The wording maps to the situation:
 | `Clearing in N min` | You're wet, and rain is forecast to end at your location / along your path |
 | `Rain next 6h` | You're wet, and the forecast says it continues at the same intensity through the lookahead |
 | `Clear next 6h` | You're dry, nothing expected in the next 6 hours |
+| `Storm in N min` / `Storm in ~Nh` | A **thunderstorm** is forecast ahead within the next 6 hours — overrides the normal rain wording |
+
+**Thunderstorms get their own word.** A storm is a stop-riding call, not
+just heavier rain — so when the model flags a thunderstorm, RainUp
+overrides the normal text. If it's storming where you are, Row 1 reads
+`Storm now` (with the rate, e.g. `Storm now · 8.0mm`). If a storm is
+forecast ahead within 6 hours, Row 2 reads `Storm in ~2h`. (Drawn from
+the official WMO weather code on the same fetch — no extra battery cost.)
 
 If you're in the middle of a long monsoonal ride and just see
 "Light rain now · 0.4mm" + "Rain next 6h" + a 6-hour sparkline of
@@ -117,7 +128,7 @@ matters in one specific scenario: when you're moving, **▲** might say
 "Dry — Clear next 6h" because you're outpacing a system that *is*
 about to hit your current spot. If you stop at a light, the icon
 switches to **⊙** and the forecast resamples where you stand — the
-message can flip to "Rain in 90 min" without anything else on the
+message can flip to "Rain in ~1.5h" without anything else on the
 screen needing to change. **The icon transition is itself the
 signal:** "what you're reading just changed because your motion did."
 
@@ -189,9 +200,11 @@ full data payload, the field has room to breathe.
 - **Open-Meteo accuracy.** The weather data is free and hyperlocal but
   not perfect. Forecasts can lag a fast-moving front by 10–15 minutes.
   Heavy localised showers can be entirely missed by the model.
-- **Projection assumes straight line at current pace.** If you take a
-  90° turn mid-ride, the rain projection along your previous heading is
-  invalid until the next fetch lands (within 5 minutes).
+- **Projection follows your turns, with a brief lag.** When you commit
+  to a new direction (a turn of more than ~45° held for a few seconds),
+  RainUp re-projects along the road you're now on within about a minute.
+  In the gap between the turn and that refetch, the path-ahead reading
+  still reflects your previous heading — the rotating ▲ is your cue.
 - **Stops re-resolve quickly.** When you stop, the icon flips to ⊙
   within a second and Row 2/3 fall back to your current-location
   forecast. The underlying data refreshes within about a minute (a
@@ -268,6 +281,8 @@ hourly forecast at your current location regardless of what's on Rows 2/3.
 | 10 | Wet, intensity escalating ahead (transition) | **moving** | `Light rain now · 0.4mm` | `Heavy rain in 30min` | `▲ 9km · 90% · 5.5mm` |
 | 11 | Wet, same bucket continuing (stationary outlook) | stationary | `Light rain now · 0.4mm` | `Rain next 6h` | `⊙ 95% · 0.6mm` |
 | 12 | Wet, clearing forecast (stationary) | stationary | `Light rain now · 0.4mm` | `Clearing in 45min` | `⊙` |
+| 13 | Thunderstorm where you are | any | `Storm now · 8.0mm` | normal (e.g. `Rain next 6h`) | per motion |
+| 14 | Thunderstorm forecast ahead | any | `Dry` / `Light rain now · 0.4mm` | `Storm in ~2h` | per motion |
 
 **Reading the matrix:**
 
@@ -284,7 +299,7 @@ hourly forecast at your current location regardless of what's on Rows 2/3.
 - **Why the icon matters even when it's "all clear"** — when you're
   moving with **▲ Dry — Clear next 6h** and stop at a light, the icon
   flips to **⊙** and the forecast resamples where you stand. The
-  message can change ("Rain in 90 min") even though nothing else on
+  message can change ("Rain in ~1.5h") even though nothing else on
   the screen has updated. The icon transition is itself the signal.
 - **Row 2 always has text** — even "good news" gets a line
   (`Clear next 6h`). The field never goes silent on you.

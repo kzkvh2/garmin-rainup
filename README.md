@@ -8,7 +8,9 @@
 
 Most weather fields show one forecast: where you are. **RainUp shows two** — what the rain is doing right now at your handlebars, and what to expect along the **direction you're actually heading**.
 
-Forecasts at 30, 60, and 90 minutes ahead, dead-reckoned from your heading and pace. Refreshed every five minutes. One reading rule: top row is "now," rows below are "what's coming." A small icon on Row 3 tells you whether the forecast is **along your path (▲)** or **at your spot (⊙)** — so when you stop at a light and the message flips, you know why.
+Forecasts at 30 and 60 minutes ahead, dead-reckoned from your heading and pace. Refreshed every five minutes. One reading rule: top row is "now," rows below are "what's coming." A small icon on Row 3 tells you whether the forecast is **along your path (▲)** or **at your spot (⊙)** — so when you stop at a light and the message flips, you know why.
+
+And when the model sees a **thunderstorm** coming, RainUp says so outright — "Storm now" or "Storm in ~2h" — because a storm is a get-off-the-bike call, not just heavier rain.
 
 ## Supported devices
 
@@ -39,4 +41,4 @@ Weather data by **[Open-Meteo](https://open-meteo.com)**, used under their free 
 
 Built by Peter Lizan as an independent project. Source code is in a separate (private) repository; this repo hosts the user-facing docs + issue tracker.
 
-Contact: lizanpeter@gmail.com (GitHub issues preferred).
+Contact: kzkvh2@gmail.com (GitHub issues preferred).

@@ -4,6 +4,36 @@ A user-facing record of what changed between releases. Internal/historical names
 
 ---
 
+## v2.2.3 — 2026-05-27
+
+**Storm warning (new):**
+
+- RainUp now calls out **thunderstorms** specifically. When a storm is happening — or coming up within the next few hours — the top row reads **"Storm now"** and the "what's coming" row reads **"Storm in ~2h"**, overriding the normal rain wording. A storm is a stop-riding call, not just heavier rain, so it gets its own state. (Drawn from the official WMO weather code on the same forecast fetch — no extra battery cost.)
+
+**The forecast follows the road you turn onto:**
+
+- Before, the "what's ahead" forecast and the direction arrow were locked to the way you were pointing at the last fetch — up to 5 minutes ago. Turn onto a new road and they'd lag. Now, when you commit to a new direction, RainUp re-checks the forecast along the road you're *actually* on, within about a minute.
+- A brief swerve or overtake no longer throws the projection off — it only re-aims when you've genuinely changed direction for a few seconds.
+
+**Honest forecast horizon:**
+
+- Dropped the 90-minute look-ahead. At riding speed that point sat ~40 km down a dead-straight line from where you were — which is rarely where a real, winding ride actually takes you, so it often described the weather somewhere you'd never go. RainUp now looks 30 and 60 minutes ahead, the range it can actually get right. The "now" and "next" rows you rely on are unchanged.
+
+**Readability:**
+
+- Times further than an hour out now read as hours ("Clearing in ~3h") instead of hard-to-parse minutes ("Clearing in 238min"). Beyond an hour, the forecast isn't accurate to the minute anyway.
+- Larger "what's coming" row and a rebalanced bottom row on the larger screen layouts, so the middle line is easier to catch at a glance.
+
+**Under the hood (reliability):**
+
+- If a single forecast point drops out over a flaky phone connection, RainUp now keeps the fresh "right here, right now" reading instead of discarding the whole update.
+- Pace used for the look-ahead now ignores stale readings left over from a long stop, so the projection doesn't over-shoot when you set off again.
+- After a restart mid-ride, RainUp no longer briefly shows look-ahead data aimed along your *old* direction.
+
+**Unit tests:** 111 passing (96 → 111; new coverage for the heading debounce, storm detection, time rounding, and the time-decayed pace buffer).
+
+---
+
 ## v2.2.2 — 2026-05-21 *(first store submission)*
 
 **Launcher icon:**
