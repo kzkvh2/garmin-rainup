@@ -257,6 +257,12 @@ Photos of the screen (when something looks wrong) are the single most
 useful thing — they capture fonts, layout, state, and freshness in one
 shot.
 
+## Support development
+
+RainUp is free, and stays free. If it's earned a spot on your handlebars
+and you'd like to chip in toward future development, you can
+**[buy me a coffee](https://buymeacoffee.com/kzkvh2)** — entirely optional.
+
 ---
 
 ## Appendix — Full scenario matrix
